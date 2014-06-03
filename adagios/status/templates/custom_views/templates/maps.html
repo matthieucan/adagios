@@ -1,12 +1,12 @@
-{% extends 'custom_views/base_view.html' %}
+{% extends view.metadata.0.fullscreen|yesno:'custom_views/base_view_fullscreen.html,custom_views/base_view.html' %}
 {% load adagiostags %}
 
 {% block data %}
 <style type="text/css">
-/* this is done to prevent a conflict from bootstrap */
-#mapOpenLayers img { max-width: none; }
+ /* this is done to prevent a conflict from bootstrap */
+ #template_content img { max-width: none; }
 </style>
-<div id="mapOpenLayers" style="height: 600px;"></div>
+<div id="template_content"></div>
 
 {% endblock %}
 
@@ -24,7 +24,7 @@
    var markers = new OpenLayers.Layer.Markers("Markers");
    
    var map = new OpenLayers.Map({
-     div: "mapOpenLayers", //projection: "EPSG:3857",
+     div: "template_content", //projection: "EPSG:3857",
      layers: [new OpenLayers.Layer.OSM(), markers],
      center: position, zoom: 1
    });
