@@ -17,12 +17,12 @@
 
 import math
 import socket
-from geoip import geolite2
 from datetime import datetime, timedelta
 from django import template
 from django.utils.timesince import timesince
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import stringfilter
+from django.shortcuts import Http404
 
 register = template.Library()
 
@@ -63,6 +63,10 @@ def replace(value, args):
 
 @register.filter("locateip")
 def locateip(value):
+    try:
+        from geoip import geolite2
+    except Exception:
+        raise Http404('Geoip is not installed! Check requirements.txt.')
     def is_legal_ip(ip):
         try:
             socket.inet_pton(socket.AF_INET, address)
