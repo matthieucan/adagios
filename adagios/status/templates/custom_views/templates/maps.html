@@ -33,7 +33,7 @@
    var greenIcon = new OpenLayers.Icon('{% url media path="external/openlayers/img/marker-green.png" %}');
    
    {% for line in data %}
-     {% with loc=line.address|default:line.name|locateip %}
+     {% with loc=line.address|default:line.name|default:line.host_address|default:line.host_name|locateip %}
        {% if loc %}
          var lonlat = new OpenLayers.LonLat({{ loc }}).transform( fromProjection, toProjection);
          var marker = new OpenLayers.Marker(lonlat,
