@@ -33,7 +33,11 @@
    var greenIcon = new OpenLayers.Icon('{% url media path="external/openlayers/img/marker-green.png" %}');
    
    {% for line in data %}
-     {% with loc=line.address|default:line.name|default:line.host_address|default:line.host_name|locateip %}
+     {% with loc=line.host_name %}
+     {% with loc=line.host_address|default:loc %}
+     {% with loc=line.name|default:loc %}
+     {% with loc=line.address|default:loc %}
+     {% with loc=loc|locateip %}
        {% if loc %}
          var lonlat = new OpenLayers.LonLat({{ loc }}).transform( fromProjection, toProjection);
          var marker = new OpenLayers.Marker(lonlat,
@@ -41,7 +45,7 @@
                                             );
          markers.addMarker(marker);
          
-         var popupContent = '<span style="color: {% if line.state == 0 %}green{% else %}red{% endif %};">{{ line.name }}</span>';
+         var popupContent = '<span style="color: {% if line.state == 0 %}green{% else %}red{% endif %};">{{ line.name|default:line.host_name }} {{ line.description }}</span>';
          var popup = new OpenLayers.Popup.FramedCloud("Popup",
                                                       lonlat,
                                                       null,
@@ -56,6 +60,10 @@
          map.addPopup(popup);
          
        {% endif %}
+     {% endwith %}
+     {% endwith %}
+     {% endwith %}
+     {% endwith %}
      {% endwith %}
    {% endfor %}
  }
